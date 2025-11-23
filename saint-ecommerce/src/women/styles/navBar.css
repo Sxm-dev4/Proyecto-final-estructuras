@@ -1,38 +1,92 @@
 .navbar {
   width: 100%;
-  height: 70px;
+  height: 80px;
   background-color: #000;
   color: #fff;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 0 3rem;
+  padding: 0 3.5rem;
   box-sizing: border-box;
 }
 
 .navbar__logo {
-  font-family: "Playfair Display", "Times New Roman", serif;
-  font-size: 2rem;
+  font-family: "Telma Variable", serif;
+  font-size: 28px;
   font-weight: 700;
-  letter-spacing: 0.06em;
+  line-height: 1;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  margin-right: 90px;
 }
 
 .navbar__menu {
   display: flex;
+  align-items: center;
   gap: 2.5rem;
   text-transform: uppercase;
-  font-size: 0.8rem;
-  letter-spacing: 0.12em;
+  font-size: 0.78rem;
+  letter-spacing: 0.14em;
+  margin-right: auto;
 }
 
-.navbar__menu a {
-  color: #fff;
-  text-decoration: none;
+.navbar__link {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  color: #ffffff;
   font-weight: 600;
+  font-size: 0.78rem;
+  letter-spacing: 0.14em;
+  text-decoration: none;
+  cursor: pointer;
 }
 
-.navbar__menu a:hover {
+.navbar__link:hover {
+  opacity: 0.8;
+}
+
+.navbar__link--active {
   text-decoration: underline;
+  text-underline-offset: 0.3em;
+}
+
+.navbar__menu-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.navbar__dropdown {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #000000;
+  padding: 0.75rem 0;
+  min-width: 220px;
+  display: none;
+  z-index: 20;
+}
+
+.navbar__menu-item--has-dropdown:hover .navbar__dropdown {
+  display: block;
+}
+
+.navbar__dropdown-link {
+  display: block;
+  padding: 0.6rem 1.5rem;
+  color: #ffffff;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.navbar__dropdown-link:hover {
+  background-color: #111111;
 }
 
 .navbar__icons {
@@ -41,14 +95,17 @@
   gap: 1.8rem;
 }
 
-.navbar__icons button {
-  background: none;
-  border: none;
-  color: #fff;
-  font-size: 1.1rem;
+.navbar__icon-svg {
+  width: 22px;
+  height: 22px;
+  stroke: #ffffff;
+  fill: none;
+  stroke-width: 1.8;
   cursor: pointer;
+  transition: opacity 0.2s ease;
 }
 
-.navbar__icons button:hover {
-  opacity: 0.8;
+.navbar__icon-svg:hover {
+  opacity: 0.7;
 }
+

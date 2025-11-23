@@ -1,34 +1,43 @@
 .women-page {
-  padding: 60px 80px 80px;
+  padding: 3rem 4rem 4rem;
+  background-color: #ffffff;
 }
 
 .women-page__title {
-  font-size: 32px;
+  font-size: 2rem;
   font-weight: 700;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
-  margin-bottom: 48px;
+  margin-bottom: 3rem;
 }
 
 .women-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 60px 40px;
+  gap: 3rem 4rem;
 }
 
 .women-card {
   text-align: center;
 }
 
-.women-card__image {
+.women-card__image-wrapper {
   width: 100%;
-  max-width: 260px;
-  display: block;
-  margin: 0 auto 16px;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.women-card__image {
+  max-width: 220px;
+  height: auto;
+  object-fit: contain;
 }
 
 .women-card__name {
-  font-size: 12px;
+  font-size: 0.8rem;
+  font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.06em;
+  line-height: 1.4;
 }
