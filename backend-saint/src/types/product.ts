@@ -30,12 +30,12 @@ export interface ProductVariant {
 
 export interface CreateProductDTO {
   name: string;
-  slug: string;
+  slug?: string;
   description: string;
   categoryId: string;
   basePrice: number;
-  currency: string;
-  images: string[];
+  currency?: string;
+  images?: string[];
   featured?: boolean;
   active?: boolean;
 }
@@ -53,7 +53,7 @@ export interface UpdateProductDTO {
 }
 
 export interface CreateVariantDTO {
-  productId: string;
+  productId?: string;
   sku: string;
   size: string;
   color: string;

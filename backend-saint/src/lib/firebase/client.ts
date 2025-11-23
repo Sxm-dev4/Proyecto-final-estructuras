@@ -15,7 +15,6 @@ let app: FirebaseApp;
 let auth: Auth;
 let db: Firestore;
 
-
 export function initClient() {
   if (getApps().length === 0) {
     app = initializeApp(firebaseConfig);
@@ -30,7 +29,6 @@ export function initClient() {
   return { app, auth, db };
 }
 
-// Exportar instancias para uso directo
 export function getClientAuth(): Auth {
   if (!auth) {
     initClient();

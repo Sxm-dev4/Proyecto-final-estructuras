@@ -1,4 +1,5 @@
-import {Timestamp} from 'firebase-admin/firestore';
+import { Timestamp } from 'firebase-admin/firestore';
+
 export interface Category {
   id: string;
   name: string;
@@ -11,7 +12,7 @@ export interface Category {
 
 export interface CreateCategoryDTO {
   name: string;
-  slug: string;
+  slug?: string;
   description?: string;
   imageUrl?: string;
 }

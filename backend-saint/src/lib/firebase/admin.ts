@@ -6,7 +6,9 @@ let app: App;
 let db: Firestore;
 let auth: Auth;
 
-
+/**
+ * Inicializa Firebase Admin SDK (solo en servidor)
+ */
 export function initAdmin() {
   if (getApps().length === 0) {
     app = initializeApp({
