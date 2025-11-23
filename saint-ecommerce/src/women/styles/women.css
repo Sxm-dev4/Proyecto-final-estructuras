@@ -1,0 +1,34 @@
+.women-page {
+  padding: 60px 80px 80px;
+}
+
+.women-page__title {
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 48px;
+}
+
+.women-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 60px 40px;
+}
+
+.women-card {
+  text-align: center;
+}
+
+.women-card__image {
+  width: 100%;
+  max-width: 260px;
+  display: block;
+  margin: 0 auto 16px;
+}
+
+.women-card__name {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}

@@ -1,0 +1,54 @@
+.navbar {
+  width: 100%;
+  height: 70px;
+  background-color: #000;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 3rem;
+  box-sizing: border-box;
+}
+
+.navbar__logo {
+  font-family: "Playfair Display", "Times New Roman", serif;
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}
+
+.navbar__menu {
+  display: flex;
+  gap: 2.5rem;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  letter-spacing: 0.12em;
+}
+
+.navbar__menu a {
+  color: #fff;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.navbar__menu a:hover {
+  text-decoration: underline;
+}
+
+.navbar__icons {
+  display: flex;
+  align-items: center;
+  gap: 1.8rem;
+}
+
+.navbar__icons button {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 1.1rem;
+  cursor: pointer;
+}
+
+.navbar__icons button:hover {
+  opacity: 0.8;
+}
