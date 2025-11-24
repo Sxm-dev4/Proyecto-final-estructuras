@@ -3,16 +3,25 @@ import { getAdminDB } from '@/lib/firebase/admin';
 import { now, serializeFirestoreData, generateSlug } from '@/lib/firestore/utils';
 import { Category, CreateCategoryDTO } from '@/types';
 
-
 /**
  * GET /api/categories
- * Obtiene todas las categorías
+ * Obtiene todas las categorías con filtros opcionales
+ * Query params: active
  */
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
+    const { searchParams } = new URL(request.url);
+    const activeParam = searchParams.get('active');
+
     const db = getAdminDB();
-    const categoriesRef = db.collection('categories');
-    const snapshot = await categoriesRef.orderBy('name', 'asc').get();
+    let query = db.collection('categories').orderBy('order', 'asc'); // ✅ Ordenar por 'order'
+
+    // Filtrar por categorías activas si se especifica
+    if (activeParam !== null) {
+      query = query.where('active', '==', activeParam === 'true') as any;
+    }
+
+    const snapshot = await query.get();
 
     const categories: Category[] = [];
     snapshot.forEach((doc) => {
@@ -22,6 +31,7 @@ export async function GET() {
     return NextResponse.json({
       success: true,
       data: categories,
+      count: categories.length,
     });
   } catch (error) {
     console.error('Error fetching categories:', error);
@@ -72,12 +82,14 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Crear la categoría
+    // Cear la categoría con los nuevos campos
     const categoryData = {
       name: body.name.trim(),
       slug,
       description: body.description || '',
       imageUrl: body.imageUrl || '',
+      order: body.order !== undefined ? body.order : 999, // Valor por defecto
+      active: body.active !== undefined ? body.active : true, // Activa por defecto
       createdAt: now(),
       updatedAt: now(),
     };

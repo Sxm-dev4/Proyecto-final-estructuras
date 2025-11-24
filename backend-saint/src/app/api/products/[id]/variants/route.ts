@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getAdminDB } from '@/lib/firebase/admin';
-import { now, serializeFirestoreData } from '@/lib/firestore/utils';
+import { now, serializeFirestoreData, generateSlug } from '@/lib/firestore/utils';
 import { ProductVariant, CreateVariantDTO } from '@/types';
 
 /**
@@ -15,7 +15,7 @@ export async function GET(
     const { id } = await params;
     const db = getAdminDB();
 
-    // Verificar que el producto existe
+    // Verificar que el producto exista
     const productDoc = await db.collection('products').doc(id).get();
     if (!productDoc.exists) {
       return NextResponse.json(
@@ -27,11 +27,12 @@ export async function GET(
       );
     }
 
-    // Obtener variantes
+    // Obtener todas las variantes del producto
     const variantsSnapshot = await db
-      .collection('productVariants')
-      .where('productId', '==', id)
-      .orderBy('size', 'asc')
+      .collection('products')
+      .doc(id)
+      .collection('variants')
+      .orderBy('createdAt', 'desc')
       .get();
 
     const variants: ProductVariant[] = [];
@@ -49,7 +50,7 @@ export async function GET(
     return NextResponse.json(
       {
         success: false,
-        error: 'Error al obtener variantes',
+        error: 'Error al obtener las variantes',
       },
       { status: 500 }
     );
@@ -65,7 +66,7 @@ export async function POST(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id: productId } = await params;
+    const { id } = await params;
     const body: CreateVariantDTO = await request.json();
 
     // Validaciones básicas
@@ -79,11 +80,21 @@ export async function POST(
       );
     }
 
-    if (!body.size || !body.color) {
+    if (!body.size || body.size.trim() === '') {
       return NextResponse.json(
         {
           success: false,
-          error: 'Talla y color son requeridos',
+          error: 'La talla es requerida',
+        },
+        { status: 400 }
+      );
+    }
+
+    if (!body.color || body.color.trim() === '') {
+      return NextResponse.json(
+        {
+          success: false,
+          error: 'El color es requerido',
         },
         { status: 400 }
       );
@@ -101,8 +112,8 @@ export async function POST(
 
     const db = getAdminDB();
 
-    // Verificar que el producto existe
-    const productDoc = await db.collection('products').doc(productId).get();
+    // Verificar que el producto exista
+    const productDoc = await db.collection('products').doc(id).get();
     if (!productDoc.exists) {
       return NextResponse.json(
         {
@@ -113,26 +124,34 @@ export async function POST(
       );
     }
 
-    // Verificar que el SKU no exista
-    const existingVariant = await db
-      .collection('productVariants')
-      .where('sku', '==', body.sku.trim())
-      .get();
+    const skuUpperCase = body.sku.trim().toUpperCase();
 
-    if (!existingVariant.empty) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: 'Ya existe una variante con ese SKU',
-        },
-        { status: 400 }
-      );
+    // Verificar que el SKU no exista en ninguna variante de ningún producto
+    const productsSnapshot = await db.collection('products').get();
+    
+    for (const productDocItem of productsSnapshot.docs) {
+      const variantsSnapshot = await db
+        .collection('products')
+        .doc(productDocItem.id)
+        .collection('variants')
+        .where('sku', '==', skuUpperCase)
+        .get();
+
+      if (!variantsSnapshot.empty) {
+        return NextResponse.json(
+          {
+            success: false,
+            error: 'Ya existe una variante con ese SKU',
+          },
+          { status: 400 }
+        );
+      }
     }
 
     // Crear la variante
     const variantData = {
-      productId,
-      sku: body.sku.trim().toUpperCase(),
+      productId: id,
+      sku: skuUpperCase,
       size: body.size.trim(),
       color: body.color.trim(),
       priceAdjustment: body.priceAdjustment || 0,
@@ -142,9 +161,14 @@ export async function POST(
       updatedAt: now(),
     };
 
-    const docRef = await db.collection('productVariants').add(variantData);
+    const variantRef = await db
+      .collection('products')
+      .doc(id)
+      .collection('variants')
+      .add(variantData);
+
     const newVariant: ProductVariant = serializeFirestoreData({
-      id: docRef.id,
+      id: variantRef.id,
       ...variantData,
     });
 

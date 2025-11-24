@@ -12,9 +12,16 @@ export async function GET(
   { params }: { params: Promise<{ id: string; variantId: string }> }
 ) {
   try {
-    const { variantId } = await params;
+    const { id, variantId } = await params;
     const db = getAdminDB();
-    const variantDoc = await db.collection('productVariants').doc(variantId).get();
+    
+    // Acceder a la variante como subcolección
+    const variantDoc = await db
+      .collection('products')
+      .doc(id)
+      .collection('variants')
+      .doc(variantId)
+      .get();
 
     if (!variantDoc.exists) {
       return NextResponse.json(
@@ -56,11 +63,18 @@ export async function PATCH(
   { params }: { params: Promise<{ id: string; variantId: string }> }
 ) {
   try {
-    const { variantId } = await params;
+    const { id, variantId } = await params;
     const body: UpdateVariantDTO = await request.json();
 
     const db = getAdminDB();
-    const variantRef = db.collection('productVariants').doc(variantId);
+    
+    // Referencia correcta a la subcolección
+    const variantRef = db
+      .collection('products')
+      .doc(id)
+      .collection('variants')
+      .doc(variantId);
+      
     const variantDoc = await variantRef.get();
 
     if (!variantDoc.exists) {
@@ -87,19 +101,25 @@ export async function PATCH(
 
     // Si se está actualizando el SKU, verificar que no exista
     if (body.sku) {
-      const existingVariant = await db
-        .collection('productVariants')
-        .where('sku', '==', body.sku.trim().toUpperCase())
-        .get();
+      const productsSnapshot = await db.collection('products').get();
+      
+      for (const productDoc of productsSnapshot.docs) {
+        const variantsSnapshot = await db
+          .collection('products')
+          .doc(productDoc.id)
+          .collection('variants')
+          .where('sku', '==', body.sku.trim().toUpperCase())
+          .get();
 
-      if (!existingVariant.empty && existingVariant.docs[0].id !== variantId) {
-        return NextResponse.json(
-          {
-            success: false,
-            error: 'Ya existe una variante con ese SKU',
-          },
-          { status: 400 }
-        );
+        if (!variantsSnapshot.empty && variantsSnapshot.docs[0].id !== variantId) {
+          return NextResponse.json(
+            {
+              success: false,
+              error: 'Ya existe una variante con ese SKU',
+            },
+            { status: 400 }
+          );
+        }
       }
     }
 
@@ -136,9 +156,15 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string; variantId: string }> }
 ) {
   try {
-    const { variantId } = await params;
+    const { id, variantId } = await params;
     const db = getAdminDB();
-    const variantRef = db.collection('productVariants').doc(variantId);
+    
+    const variantRef = db
+      .collection('products')
+      .doc(id)
+      .collection('variants')
+      .doc(variantId);
+      
     const variantDoc = await variantRef.get();
 
     if (!variantDoc.exists) {

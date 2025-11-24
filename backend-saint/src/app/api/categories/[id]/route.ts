@@ -82,6 +82,8 @@ export async function PATCH(
     if (body.slug !== undefined) updateData.slug = body.slug;
     if (body.description !== undefined) updateData.description = body.description;
     if (body.imageUrl !== undefined) updateData.imageUrl = body.imageUrl;
+    if (body.order !== undefined) updateData.order = body.order; //  Agregar order
+    if (body.active !== undefined) updateData.active = body.active; // Agregar active
 
     // Si se está actualizando el slug, verificar que no exista
     if (body.slug) {

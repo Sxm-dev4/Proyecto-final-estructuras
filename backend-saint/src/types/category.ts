@@ -6,6 +6,8 @@ export interface Category {
   slug: string;
   description?: string;
   imageUrl?: string;
+  order?: number;        
+  active?: boolean;    
   createdAt: Timestamp;
   updatedAt: Timestamp;
 }
@@ -15,6 +17,8 @@ export interface CreateCategoryDTO {
   slug?: string;
   description?: string;
   imageUrl?: string;
+  order?: number;        
+  active?: boolean;      
 }
 
 export interface UpdateCategoryDTO {
@@ -22,4 +26,6 @@ export interface UpdateCategoryDTO {
   slug?: string;
   description?: string;
   imageUrl?: string;
+  order?: number;        
+  active?: boolean;      
 }

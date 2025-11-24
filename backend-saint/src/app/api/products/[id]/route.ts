@@ -168,10 +168,11 @@ export async function DELETE(
       );
     }
 
-    // Eliminar todas las variantes del producto
+    // Eliminar todas las variantes del producto (subcolección)
     const variantsSnapshot = await db
-      .collection('productVariants')
-      .where('productId', '==', id)
+      .collection('products')
+      .doc(id)
+      .collection('variants')
       .get();
 
     const batch = db.batch();
