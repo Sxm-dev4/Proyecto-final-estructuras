@@ -1,43 +1,45 @@
-.women-page {
-  padding: 3rem 4rem 4rem;
+.women-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 80px 60px 120px;
   background-color: #ffffff;
 }
 
-.women-page__title {
-  font-size: 2rem;
+.women-title {
+  font-family: "Telma Variable", serif;
+  font-size: 32px;
   font-weight: 700;
-  letter-spacing: 0.2em;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
-  margin-bottom: 3rem;
+  color: #000000;
+  margin: 0 0 80px 0;
 }
 
 .women-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 3rem 4rem;
+  column-gap: 80px;
+  row-gap: 80px;
+  justify-items: center;
 }
 
-.women-card {
+.women-item {
   text-align: center;
 }
 
-.women-card__image-wrapper {
+.women-img {
+  display: block;
   width: 100%;
-  display: flex;
-  justify-content: center;
-  margin-bottom: 1rem;
-}
-
-.women-card__image {
   max-width: 220px;
   height: auto;
-  object-fit: contain;
+  margin: 0 auto 24px;
 }
 
-.women-card__name {
-  font-size: 0.8rem;
+.women-name {
+  font-size: 11px;
   font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.12em;
+  color: #000000;
   line-height: 1.4;
 }
