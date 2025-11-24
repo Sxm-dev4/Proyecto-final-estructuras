@@ -12,8 +12,6 @@ import { Cart } from '@/types';
  */
 export async function GET(request: NextRequest) {
   try {
-    // 🔐 TODO: En Fase 7, obtener userId del token de autenticación
-    // Por ahora usamos un userId de prueba
     const userId = request.headers.get('x-user-id') || 'test-user-123';
 
     const db = getAdminDB();
